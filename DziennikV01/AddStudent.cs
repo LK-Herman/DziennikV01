@@ -79,8 +79,7 @@ namespace DziennikV01
             string uczen_kod = textBoxOpiekunKodPocztowy1.Text;
             string uczen_tel = textBoxNrTelefonu.Text;
             string uczen_email = textBoxEmail.Text;
-            string uczen_id_op1 = newGUIDidOp1;
-            string uczen_id_op2 = newGUIDidOp2;
+            
 
             // OPIEKUN 1
             string op1_imie = textBoxOpiekunImie1.Text;
@@ -91,6 +90,7 @@ namespace DziennikV01
             string op1_kod = textBoxOpiekunKodPocztowy1.Text;
             string op1_tel = textBoxOpiekunNrTelefonu1.Text;
             string op1_email = textBoxOpiekunEmail1.Text;
+            
             // OPIEKUN 2 
             string op2_imie = textBoxOpiekunImie2.Text;
             string op2_nazwisko = textBoxOpiekunNazwisko2.Text;
@@ -107,14 +107,14 @@ namespace DziennikV01
             {
                 checkSum = (textBoxName.Text.Length * textBoxLastName.Text.Length * textBoxNrTelefonu.Text.Length);
                 checkSum *= (textBoxOpiekunImie1.Text.Length * textBoxOpiekunNazwisko1.Text.Length * textBoxOpiekunUlica1.Text.Length * textBoxOpiekunNrDomu1.Text.Length * textBoxOpiekunMiejscowosc1.Text.Length * textBoxOpiekunKodPocztowy1.Text.Length * textBoxOpiekunNrTelefonu1.Text.Length);
-                uczen_id_op2 = null;               
+                
             }
             else if (checkBoxTylko1Opiekun.Checked == false && checkBoxAdresOpiekuna1.Checked == true) // jeżeli 2 opiekunów pod jednym adresem
             {
                 checkSum = (textBoxName.Text.Length * textBoxLastName.Text.Length * textBoxNrTelefonu.Text.Length);
                 checkSum *= (textBoxOpiekunImie1.Text.Length * textBoxOpiekunNazwisko1.Text.Length * textBoxOpiekunUlica1.Text.Length * textBoxOpiekunNrDomu1.Text.Length * textBoxOpiekunMiejscowosc1.Text.Length * textBoxOpiekunKodPocztowy1.Text.Length * textBoxOpiekunNrTelefonu1.Text.Length);
                 checkSum *= (textBoxOpiekunImie2.Text.Length * textBoxOpiekunNazwisko2.Text.Length * textBoxOpiekunNrTelefonu2.Text.Length);
-                uczen_id_op2 = newGUIDidOp2;
+                
                 op2_ulica = op1_ulica;
                 op2_nrD = op1_nrD;
                 op2_miejsc = op1_miejsc;
@@ -147,18 +147,18 @@ namespace DziennikV01
 
                 // zapytania SQL
 
-                string queryUczenDane = "INSERT INTO dziennik.uczen (id_uczen, imie, nazwisko, data_urodzenia, id_opiekun1, id_opiekun2) " +
-                                     "VALUES('" + newGUIDidUcz + "','" + uczen_imie + "','" + uczen_nazwisko + "','" + uczen_data + "','" + uczen_id_op1 + "','" + uczen_id_op2 + "');";
+                string queryUczenDane = "INSERT INTO dziennik.uczen (id_uczen, imie, nazwisko, data_urodzenia) " +
+                                     "VALUES('" + newGUIDidUcz + "','" + uczen_imie + "','" + uczen_nazwisko + "','" + uczen_data + "');";
                 
                 string queryUczenKontakt = "INSERT INTO dziennik.kontakt (id_kontakt, ulica, nr_domu, miejscowosc, kod_pocztowy, nr_tel, email ) " +
                                      "VALUES ('" + newGUIDidUcz + "','" + uczen_ulica + "','" + uczen_nrD + "','" + uczen_miejsc + "','" + uczen_kod + "','" + uczen_tel + "','" + uczen_email + "'); ";
                 
-                string queryOp1Dane = "INSERT INTO dziennik.opiekun (id_opiekun, imie, nazwisko) VALUES ('"+ newGUIDidOp1 + "','"+ op1_imie + "','"+ op1_nazwisko + "');";
+                string queryOp1Dane = "INSERT INTO dziennik.opiekun (id_opiekun, imie, nazwisko) VALUES ('"+ newGUIDidOp1 + "','"+ op1_imie + "','"+ op1_nazwisko + "','" + uczen_id + "');";
                 
                 string queryOp1Kontakt = "INSERT INTO dziennik.kontakt (id_kontakt, ulica, nr_domu, miejscowosc, kod_pocztowy, nr_tel, email ) " +
                                      "VALUES ('" + newGUIDidOp1 + "','" + op1_ulica + "','" + op1_nrD + "','" + op1_miejsc + "','" + op1_kod + "','" + op1_tel + "','" + op1_email + "'); ";
 
-                string queryOp2Dane = "INSERT INTO dziennik.opiekun (id_opiekun, imie, nazwisko) VALUES ('" + newGUIDidOp2 + "','" + op2_imie + "','" + op2_nazwisko + "');";
+                string queryOp2Dane = "INSERT INTO dziennik.opiekun (id_opiekun, imie, nazwisko) VALUES ('" + newGUIDidOp2 + "','" + op2_imie + "','" + op2_nazwisko + "','" + uczen_id+"');";
                 
                 string queryOp2Kontakt = "INSERT INTO dziennik.kontakt (id_kontakt, ulica, nr_domu, miejscowosc, kod_pocztowy, nr_tel, email ) " +
                                      "VALUES ('" + newGUIDidOp2 + "','" + op2_ulica + "','" + op2_nrD + "','" + op2_miejsc + "','" + op2_kod + "','" + op2_tel + "','" + op2_email + "'); ";
@@ -186,7 +186,7 @@ namespace DziennikV01
                     commandDBuczenKontakt.ExecuteNonQuery();
                     commandDBopiekunDane.ExecuteNonQuery();
                     commandDBopiekunKontakt.ExecuteNonQuery();
-                    if(uczen_id_op2 != null)
+                    if(checkBoxTylko1Opiekun.Checked == false)
                     {
                         commandDBopiekunDane = new MySqlCommand(queryOp2Dane, databaseConnection);
                         commandDBopiekunKontakt = new MySqlCommand(queryOp2Kontakt, databaseConnection);
