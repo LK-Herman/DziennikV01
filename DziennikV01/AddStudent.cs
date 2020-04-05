@@ -215,6 +215,14 @@ namespace DziennikV01
                     }
                     else
                     {
+                        textBoxName.Text="";
+                        textBoxLastName.Text="";
+                        textBoxNrTelefonu.Text="";
+                        textBoxEmail.Text="";
+                        textBoxOpiekunImie1.Text="";
+                        textBoxOpiekunNazwisko1.Text="";
+                        textBoxOpiekunUlica1.Text="";
+                        
                         this.Refresh();
                     }
                 }
